@@ -20,16 +20,19 @@ class Messages{
 
   public function getAllMessages(){
     $returnArray = Message::getAll();
+    if(sizeof($returnArray) == 0){
+      $returnArray = "No messages have been submitted yet.";
+    }
     return $returnArray;
   }
 
   public function deleteMessage($id){
     $message = Message::getById($id);
-    if($message === false){
+    if(sizeof($message) != 1){
       throw new DeleteMessageException("Unable to delete message.");
     }
-    $message->delete();
-    return "Messaged Deleted";
+    $message[0]->delete();
+    return "Message Deleted";
   }
 
 }

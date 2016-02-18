@@ -1,15 +1,14 @@
 <?php
 ini_set('date.timezone', 'Europe/London');
 include_once(__DIR__."/classes/Messages.php");
-$createMessageException = "";
+$createMessageException = $infoMessage = "";
 $messages = new Messages();
 if($_POST && isset($_POST["submit"])){
   try{
     if($_POST["submit"] == "Create Message" && isset($_POST["message"])){
       $messages->createNewMessage($_POST["message"]);
     } elseif($_POST["submit"] == "Delete" && isset($_POST["messageId"])){
-      $messages->deleteMessage($_POST["messageId"]);
-      var_dump($_POST);
+      $infoMessage = $messages->deleteMessage($_POST["messageId"]);
     }
   }catch(CreateMessageException $e){
     $createMessageException = $e->getMessage();
@@ -28,21 +27,28 @@ $messagesList = $messages->getAllMessages();
 
    <body>
      <div class="container">
-       <?php foreach($messagesList as $message){ ?>
+       <div class="row">
+         <div class="col-sm-12"><?=$infoMessage?></div>
+       </div>
+       <?php
+       if(is_array($messagesList)){
+         foreach($messagesList as $message){ ?>
+           <div class="row">
+             <div class="col-sm-6"><p>Date Submitted: <?=$message->getDateSubmitted()?></p></div>
+             <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
+               <input type="hidden" value="<?= $message->getMessageId()?>" name="messageId">
+               <div class="col-sm-6"><input name="submit" value="Delete" type="submit"></div>
+             </form>
+           </div>
+           <div class="row">
+             <div class="col-sm-12"><p><?=$message->getMessage()?></p></div>
+           </div>
+         <?php } ?>
+       <?php } else { ?>
          <div class="row">
-           <div class="col-sm-6"><p>Date Submitted: <?=$message->getDateSubmitted()?></p></div>
-           <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
-             <input type="hidden" value="<?= $message->getMessageId()?>" name="messageId">
-             <div class="col-sm-6"><input name="submit" value="Delete" type="submit"></div>
-           </form>
-         </div>
-         <div class="row">
-
-           <div class="col-sm-12"><p><?=$message->getMessage()?></p></div>
+           <div class="col-sm-12"><h2><?=$messagesList?></h2></div>
          </div>
        <?php } ?>
-
-
 
        <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
          <div class="row">

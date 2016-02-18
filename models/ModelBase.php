@@ -17,7 +17,7 @@ class ModelBase{
   protected static function runSQLStatic($sql, $data){
     $dbConn = new RestDBM("messageBoard");
     try{
-      $sqlReturn = $dbConn->prepareStatment("SELECT * FROM message", array());
+      $sqlReturn = $dbConn->prepareStatment($sql, $data);
       $dbConn->closeConnection();
       return $sqlReturn->fetchAll(PDO::FETCH_ASSOC);
     } catch(SQLException $e){

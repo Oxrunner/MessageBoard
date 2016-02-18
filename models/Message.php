@@ -44,14 +44,7 @@ class Message extends ModelBase{
     foreach ($searchResults as $row) {
       $returnArray[] = new Message($row["messageId"], $row["message"], $row["dateSubmitted"]);
     }
-    if(sizeof($returnArray) == 1){
-      return $returnArray[0];
-    } elseif(sizeof($returnArray) == 0){
-      return false;
-    } else {
-      return $returnArray;
-    }
-
+    return $returnArray;
   }
 
   public function setMessage($message){
