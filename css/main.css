@@ -31,7 +31,7 @@ label{
     float:right;
 }
 
-#createButton{
+#createButton, #registerButton{
     display: block;
     margin: 0 auto;
 }

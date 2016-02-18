@@ -48,7 +48,7 @@ if($_POST && isset($_POST["submit"]) && $_POST["submit"] = "Register" && isset($
             <div class="col-sm-6"><input id="password" name="password" type="password"></div>
           </div>
           <div class="row">
-            <div class="col-sm-12"><input type="submit" name="submit" value="Register"></div>
+            <div class="col-sm-12"><input id="registerButton" type="submit" name="submit" value="Register"></div>
           </div>
         </form>
 
