@@ -28,7 +28,10 @@ input {
 label{
     margin: 0 auto;
     font-size: 1.2em;
-    float:right;
+}
+
+.labelFloatRight{
+  float:right;
 }
 
 #createButton, #registerButton{

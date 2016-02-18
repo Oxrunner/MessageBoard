@@ -1,5 +1,6 @@
 <?php
-
+include_once(__DIR__."/../models/User.php");
+include_once(__DIR__."/HashString.php");
 
 class UserSession{
 
@@ -9,15 +10,36 @@ class UserSession{
     @session_start();
   }
 
-  public function checkLoggedIn(){
+  public function loggedIn(){
     if(isset($_SESSION[$this->sessionKey])){
       return true;
     }
     return false;
   }
 
-  public function logInUser($userId, $password){
+  public function logInUser($username, $password){
+    $user = $this->getUser($username);
+    if($this->getHashedPassword($password, $user) == $user->getPassword()){
+        $_SESSION[$this->sessionKey]["username"] = $user->getUsername();
+        $_SESSION[$this->sessionKey]["admin"] = $user->getAdmin();
+    } else {
+      throw new InvalidUsernameOrPasswordException();
+    }
+  }
 
+  private function getHashedPassword($password, $user){
+    $hashString = new HashString();
+    return $hashString->hashString($password, $user->getSalt1(), $user->getSalt2());
+  }
+
+  private function getUser($username){
+    $users = User::getByUsername($username);
+    foreach ($users as $user) {
+      if($username === $user->getUsername()){
+        return $user;
+      }
+    }
+    throw new InvalidUsernameOrPasswordException();
   }
 
   public function logOutUser(){
@@ -26,7 +48,7 @@ class UserSession{
   }
 
   public function getUserDetails($field){
-      if($this->checkLoggedIn && isset($_SESSION[$this->sessionKey][$field])){
+      if($this->loggedIn() && isset($_SESSION[$this->sessionKey][$field])){
         return $_SESSION[$this->sessionKey][$field];
       } else {
         return false;
@@ -34,12 +56,17 @@ class UserSession{
   }
 
   public function getUserDetailsArray(){
-    if($this->checkLoggedIn && $_SESSION[$this->sessionKey]){
+    if($this->loggedIn() && $_SESSION[$this->sessionKey]){
       return $_SESSION[$this->sessionKey];
     }
     return false;
   }
 }
 
+class InvalidUsernameOrPasswordException extends Exception{
+	public function __construct() {
+        parent::__construct("Username or password entered was incorrect.", 0, null);
+    }
+}
 
  ?>

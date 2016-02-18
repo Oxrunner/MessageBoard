@@ -8,18 +8,20 @@ class User extends ModelBase{
   private $password;
   private $salt1;
   private $salt2;
+  private $admin;
 
-  public function __construct($userId=null, $username=null, $password=null, $salt1=null, $salt2=null){
+  public function __construct($userId=null, $username=null, $password=null, $salt1=null, $salt2=null, $admin=0){
       $this->userId = $userId;
       $this->username = $username;
       $this->password = $password;
       $this->salt1 = $salt1;
       $this->salt2 = $salt2;
+      $this->admin = $admin;
   }
 
   public function save(){
       if($this->userId == null){
-        parent::runSQL("INSERT INTO user(username, password, salt1, salt2) VALUES (?,?,?,?)", array($this->username, $this->password, $this->salt1, $this->salt2));
+        parent::runSQL("INSERT INTO user(username, password, salt1, salt2, admin) VALUES (?,?,?,?,?)", array($this->username, $this->password, $this->salt1, $this->salt2, $this->admin));
         $this->userId = $this->dbConn->getLastInsertedId();
         $this->dbConn->closeConnection();
       }
@@ -45,7 +47,7 @@ class User extends ModelBase{
   private static function getReturnArray($searchResults){
     $returnArray = array();
     foreach ($searchResults as $row) {
-      $returnArray[] = new User($row["userId"], $row["username"], $row["password"]);
+      $returnArray[] = new User($row["userId"], $row["username"], $row["password"], $row["salt1"], $row["salt2"], $row["admin"]);
     }
     return $returnArray;
   }
@@ -66,11 +68,15 @@ class User extends ModelBase{
     $this->salt1 = $salt2;
   }
 
-  public function getSalt1($salt1){
+  public function setAdmin($admin){
+    $this->admin = $admin;
+  }
+
+  public function getSalt1(){
     return $this->salt1;
   }
 
-  public function getSalt2($salt2){
+  public function getSalt2(){
     return $this->salt2;
   }
 
@@ -84,6 +90,10 @@ class User extends ModelBase{
 
   public function getPassword(){
     return $this->password;
+  }
+
+  public function getAdmin(){
+    return $this->admin;
   }
 
 }

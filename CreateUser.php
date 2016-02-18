@@ -10,12 +10,8 @@ if($_POST && isset($_POST["submit"]) && $_POST["submit"] = "Register" && isset($
   } catch(CreateUserException $e){
     $errorMessage = $e->getMessage();
   }
-
 }
-
  ?>
-
-
   <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -40,11 +36,11 @@ if($_POST && isset($_POST["submit"]) && $_POST["submit"] = "Register" && isset($
         </div>
         <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
           <div class="row">
-            <div class="col-sm-6"><label for="username">Username:</label></div>
+            <div class="col-sm-6"><label for="username" class="labelFloatRight">Username:</label></div>
             <div class="col-sm-6"><input id="username" name="username" type="text"></div>
           </div>
           <div class="row">
-            <div class="col-sm-6"><label for="password">Password:</label></div>
+            <div class="col-sm-6"><label for="password" class="labelFloatRight">Password:</label></div>
             <div class="col-sm-6"><input id="password" name="password" type="password"></div>
           </div>
           <div class="row">

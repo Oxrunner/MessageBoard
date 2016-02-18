@@ -1,18 +1,28 @@
 <?php
 ini_set('date.timezone', 'Europe/London');
 include_once(__DIR__."/classes/Messages.php");
+include_once(__DIR__."/classes/UserSession.php");
+
+$userSession = new UserSession();
+
 $createMessageException = $infoMessage = $errorMessage = "";
-$messages = new Messages();
+$messages = new Messages($userSession);
 if($_POST && isset($_POST["submit"])){
   try{
     if($_POST["submit"] == "Create Message" && isset($_POST["message"])){
       $infoMessage = $messages->createNewMessage($_POST["message"]);
     } elseif($_POST["submit"] == "Delete" && isset($_POST["messageId"])){
       $infoMessage = $messages->deleteMessage($_POST["messageId"]);
+    } elseif($_POST["submit"] == "Login" && isset($_POST["username"]) && isset($_POST["password"])){
+      $userSession->logInUser($_POST["username"], $_POST["password"]);
+    } elseif($_POST["submit"] == "Logout"){
+      $userSession->logOutUser();
     }
   }catch(CreateMessageException $e){
     $createMessageException = $e->getMessage();
   }catch(DeleteMessageException $e){
+    $errorMessage = $e->getMessage();
+  }catch(InvalidUsernameOrPasswordException $e){
     $errorMessage = $e->getMessage();
   }
 }
@@ -30,7 +40,23 @@ $messagesList = $messages->getAllMessages();
    </head>
 
    <body>
+
      <div class="container">
+       <div class="row">
+         <div class="col-sm-12">
+           <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
+           <?php if($userSession->loggedIn()){ ?>
+            <p>Welcome <?=$userSession->getUserDetails("username")?></p><input type="submit" name="submit" value="Logout">
+           <?php } else { ?>
+                <label for="username">Username:</label><input type="text" id="username" name="username">
+                <label for="password">Password:</label><input type="password" id="password" name="password">
+                <input type="submit" name="submit" value="Login">
+           <?php } ?>
+           </form>
+
+         </div>
+       </div>
+
        <div class="row">
          <div class="col-sm-12"><h1>Message Board</h1></div>
        </div>
@@ -46,10 +72,12 @@ $messagesList = $messages->getAllMessages();
            <div class="messages">
              <div class="row">
                <div class="col-sm-6"><p>Date Submitted: <?=$message->getDateSubmitted()?></p></div>
-               <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
-                 <input type="hidden" value="<?= $message->getMessageId()?>" name="messageId">
-                 <div class="col-sm-6"><input name="submit" value="Delete" type="submit" class="deleteButton"></div>
-               </form>
+               <?php if($userSession->loggedIn() && $userSession->getUserDetails("admin") == 1){ ?>
+                 <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
+                   <input type="hidden" value="<?= $message->getMessageId()?>" name="messageId">
+                   <div class="col-sm-6"><input name="submit" value="Delete" type="submit" class="deleteButton"></div>
+                 </form>
+               <?php } ?>
              </div>
              <div class="row">
                <div class="col-sm-12"><p><?=$message->getMessage()?></p></div>
@@ -67,7 +95,7 @@ $messagesList = $messages->getAllMessages();
            <div class="col-sm-12"><p class="errorMessage"><?=$createMessageException?></p></div>
          </div>
          <div class="row">
-           <div class="col-sm-4"><label for="message">Message:</label></div>
+           <div class="col-sm-4"><label for="message" class="labelFloatRight">Message:</label></div>
            <div class="col-sm-8"><textarea rows="4" cols="50" name="message" id="message"></textarea></div>
          </div>
          <div class="row">

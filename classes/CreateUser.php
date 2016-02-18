@@ -11,7 +11,7 @@ class CreateUser{
     $salt1 = $hashedString->getASalt();
     $salt2 = $hashedString->getASalt();
     $hashedPassword = $hashedString->hashString($password, $salt1, $salt2);
-    $newUser = new User(null, $username, $hashedPassword, $salt1, $salt2);
+    $newUser = new User(null, $username, $hashedPassword, $salt1, $salt2, 0);
     $newUser->save();
     return "New Account succesfully created.";
   }

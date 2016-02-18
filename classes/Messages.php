@@ -4,10 +4,11 @@
 include_once(__DIR__."/../models/Message.php");
 class Messages{
 
-  public function __construct(){
+  private $userSession;
 
+  public function __construct($userSession){
+    $this->userSession = $userSession;
   }
-
 
   public function createNewMessage($message=null){
     if($message == null || empty($message) || $message == ""){
@@ -27,12 +28,16 @@ class Messages{
   }
 
   public function deleteMessage($id){
-    $message = Message::getById($id);
-    if(sizeof($message) != 1){
-      throw new DeleteMessageException("Unable to delete message.");
+    if($userSession->loggedIn() && $userSession->getUserDetails("admin") == 1){
+      $message = Message::getById($id);
+      if(sizeof($message) != 1){
+        throw new DeleteMessageException("Unable to delete message.");
+      }
+      $message[0]->delete();
+      return "Message Deleted";
+    } else {
+      throw new DeleteMessageException("You do not have permission to delete messages.");
     }
-    $message[0]->delete();
-    return "Message Deleted";
   }
 
 }
