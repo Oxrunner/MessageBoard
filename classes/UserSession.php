@@ -16,7 +16,7 @@ class UserSession{
     return false;
   }
 
-  public function createNewSession($userId){
+  public function logInUser($userId, $password){
 
   }
 

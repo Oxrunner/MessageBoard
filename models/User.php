@@ -6,17 +6,20 @@ class User extends ModelBase{
   private $userId;
   private $username;
   private $password;
+  private $salt1;
+  private $salt2;
 
-  public function __construct($userId=null, $username=null, $password=null){
+  public function __construct($userId=null, $username=null, $password=null, $salt1=null, $salt2=null){
       $this->userId = $userId;
       $this->username = $username;
       $this->password = $password;
+      $this->salt1 = $salt1;
+      $this->salt2 = $salt2;
   }
 
   public function save(){
       if($this->userId == null){
-        $this->password = date("Y-m-d H:i:s");
-        parent::runSQL("INSERT INTO user(username, password) VALUES (?,?)", array($this->username, $this->password));
+        parent::runSQL("INSERT INTO user(username, password, salt1, salt2) VALUES (?,?,?,?)", array($this->username, $this->password, $this->salt1, $this->salt2));
         $this->userId = $this->dbConn->getLastInsertedId();
         $this->dbConn->closeConnection();
       }
@@ -29,17 +32,17 @@ class User extends ModelBase{
     }
   }
 
+  public static function getByUsername($username){
+    $searchResults = ModelBase::runSQLStatic("SELECT * FROM user WHERE username = ?", array($username));
+    return self::getReturnArray($searchResults);
+  }
+
   public static function getById($id){
     $searchResults = ModelBase::runSQLStatic("SELECT * FROM user WHERE userId = ?", array($id));
-    return self::createuserReturn($searchResults);
+    return self::getReturnArray($searchResults);
   }
 
-  public static function getAll(){
-    $searchResults = ModelBase::runSQLStatic("SELECT * FROM user", array());
-    return self::createuserReturn($searchResults);
-  }
-
-  private static function createuserReturn($searchResults){
+  private static function getReturnArray($searchResults){
     $returnArray = array();
     foreach ($searchResults as $row) {
       $returnArray[] = new User($row["userId"], $row["username"], $row["password"]);
@@ -53,6 +56,22 @@ class User extends ModelBase{
 
   public function setPassword($password){
     $this->password = $password;
+  }
+
+  public function setSalt1($salt1){
+    $this->salt1 = $salt1;
+  }
+
+  public function setSalt2($salt2){
+    $this->salt1 = $salt2;
+  }
+
+  public function getSalt1($salt1){
+    return $this->salt1;
+  }
+
+  public function getSalt2($salt2){
+    return $this->salt2;
   }
 
   public function getUsername(){
