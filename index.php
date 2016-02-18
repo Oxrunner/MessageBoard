@@ -1,7 +1,7 @@
 <?php
 ini_set('date.timezone', 'Europe/London');
 include_once(__DIR__."/classes/Messages.php");
-$createMessageException = $infoMessage = "";
+$createMessageException = $infoMessage = $errorMessage = "";
 $messages = new Messages();
 if($_POST && isset($_POST["submit"])){
   try{
@@ -12,6 +12,8 @@ if($_POST && isset($_POST["submit"])){
     }
   }catch(CreateMessageException $e){
     $createMessageException = $e->getMessage();
+  }catch(DeleteMessageException $e){
+    $errorMessage = $e->getMessage();
   }
 }
 $messagesList = $messages->getAllMessages();
@@ -28,7 +30,10 @@ $messagesList = $messages->getAllMessages();
    <body>
      <div class="container">
        <div class="row">
-         <div class="col-sm-12"><?=$infoMessage?></div>
+         <div class="col-sm-12"><p><?=$infoMessage?></p></div>
+       </div>
+       <div class="row">
+         <div class="col-sm-12"><p><?=$errorMessage?></p></div>
        </div>
        <?php
        if(is_array($messagesList)){
