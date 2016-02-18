@@ -1,16 +1,22 @@
 <?php
 ini_set('date.timezone', 'Europe/London');
 include_once(__DIR__."/classes/Messages.php");
+$createMessageException = "";
 $messages = new Messages();
 if($_POST && isset($_POST["submit"])){
-  if($_POST["submit"] == "Create Message" && isset($_POST["message"])){
+  try{
+    if($_POST["submit"] == "Create Message" && isset($_POST["message"])){
       $messages->createNewMessage($_POST["message"]);
+    } elseif($_POST["submit"] == "Delete" && isset($_POST["messageId"])){
+      $messages->deleteMessage($_POST["messageId"]);
+      var_dump($_POST);
+    }
+  }catch(CreateMessageException $e){
+    $createMessageException = $e->getMessage();
   }
 }
 $messagesList = $messages->getAllMessages();
-
-var_dump($messagesList);
- ?>
+?>
  <!DOCTYPE html>
  <html lang="en">
    <head>
@@ -24,9 +30,14 @@ var_dump($messagesList);
      <div class="container">
        <?php foreach($messagesList as $message){ ?>
          <div class="row">
-           <div class="col-sm-12"><p>Date Submitted: <?=$message->getDateSubmitted()?></p></div>
+           <div class="col-sm-6"><p>Date Submitted: <?=$message->getDateSubmitted()?></p></div>
+           <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
+             <input type="hidden" value="<?= $message->getMessageId()?>" name="messageId">
+             <div class="col-sm-6"><input name="submit" value="Delete" type="submit"></div>
+           </form>
          </div>
          <div class="row">
+
            <div class="col-sm-12"><p><?=$message->getMessage()?></p></div>
          </div>
        <?php } ?>
@@ -34,6 +45,9 @@ var_dump($messagesList);
 
 
        <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
+         <div class="row">
+           <div class="col-sm-12"><?=$createMessageException?></div>
+         </div>
          <div class="row">
            <div class="col-sm-12"><textarea rows="4" cols="50" name="message"></textarea></div>
          </div>

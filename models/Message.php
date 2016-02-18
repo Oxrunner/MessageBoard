@@ -23,19 +23,35 @@ class Message extends ModelBase{
 
   }
 
-  public static function getAll(){
-    $dbConn = new RestDBM("messageBoard");
-    try{
-      $sqlReturn = $dbConn->prepareStatment("SELECT * FROM message", array());
-      $returnArray = array();
-      foreach ($sqlReturn->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        $returnArray[] = new Message($row["messageId"], $row["message"], $row["dateSubmitted"]);
-      }
-      $dbConn->closeConnection();
-      return $returnArray;
-    } catch(SQLException $e){
-      throw new ExceptionRunningSQL($e->getMessage());
+  public function delete(){
+    if($this->messageId != null){
+      parent::runSQL("DELETE FROM message WHERE messageId = ?", array($this->messageId));
     }
+  }
+
+  public static function getById($id){
+    $searchResults = ModelBase::runSQLStatic("SELECT * FROM message WHERE messageId = ?", array($id));
+    return self::createMessageReturn($searchResults);
+  }
+
+  public static function getAll(){
+    $searchResults = ModelBase::runSQLStatic("SELECT * FROM message", array());
+    return self::createMessageReturn($searchResults);
+  }
+
+  private static function createMessageReturn($searchResults){
+    $returnArray = array();
+    foreach ($searchResults as $row) {
+      $returnArray[] = new Message($row["messageId"], $row["message"], $row["dateSubmitted"]);
+    }
+    if(sizeof($returnArray) == 1){
+      return $returnArray[0];
+    } elseif(sizeof($returnArray) == 0){
+      return false;
+    } else {
+      return $returnArray;
+    }
+
   }
 
   public function setMessage($message){
