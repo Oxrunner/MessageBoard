@@ -1,0 +1,62 @@
+h1 {
+    color: lightblue;
+    letter-spacing: -3px;
+    font-family: 'Lato', sans-serif;
+    font-size: 100px;
+    font-weight: 200;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+h2{
+    text-align: center;
+}
+
+
+input {
+    background: white;
+    border: 1px solid #DDD;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #DDD inset;
+    color: #666;
+    outline: none;
+    height:25px;
+    width: 130px;
+    margin-bottom: 5px;
+}
+
+label{
+    margin: 0 auto;
+    font-size: 1.2em;
+    float:right;
+}
+
+#createButton{
+    display: block;
+    margin: 0 auto;
+}
+
+.deleteButton{
+  float:right;
+  width: auto;
+  background-color : red;
+  color: white;
+}
+
+.messages{
+  width:50%;
+  margin: 0 auto;
+  border-style: solid;
+  border-color: lightblue;
+  margin-top: 1%;
+  padding: 0.5%;
+}
+
+#infoMessages, .errorMessage{
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.errorMessage{
+  color: red;
+}
