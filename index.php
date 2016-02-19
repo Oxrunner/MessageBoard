@@ -74,9 +74,9 @@ $messagesList = $messages->getAllMessages();
            <div class="col-sm-8"><textarea rows="4" cols="50" name="message" id="message"></textarea></div>
          </div>
          <div class="row">
-           <div class="col-sm-4"></textarea></div>
+           <div class="col-sm-4"></div>
            <div class="col-sm-4"><input type="submit" value="Create Message" name="submit" id="createButton"></textarea></div>
-           <div class="col-sm-4"></textarea></div>
+           <div class="col-sm-4"></div>
          </div>
        </form>
 
