@@ -1,5 +1,7 @@
 <?php
-include_once(__DIR__."/../../../RestDBM.php");
+//include_once(__DIR__."/../../../RestDBM.php");//For when on live as the connection details are outside the www folder for security
+include_once(__DIR__."/../dbConnection/RestDBM.php");//User When running locally so you can connect
+
 class ModelBase{
 
   protected $dbConn;
