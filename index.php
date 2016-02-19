@@ -46,7 +46,7 @@ $messagesList = $messages->getAllMessages();
          <div class="col-sm-12">
            <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
            <?php if($userSession->loggedIn()){ ?>
-            <p>Welcome <?=$userSession->getUserDetails("username")?></p><input type="submit" name="submit" value="Logout">
+            <p>Welcome <?php echo htmlentities($userSession->getUserDetails("username"));?></p><input type="submit" name="submit" value="Logout">
            <?php } else { ?>
                 <label for="username">Username:</label><input type="text" id="username" name="username"><br>
                 <label for="password">Password:</label><input type="password" id="password" name="password"><br>
@@ -85,7 +85,7 @@ $messagesList = $messages->getAllMessages();
          foreach($messagesList as $message){ ?>
            <div class="messages">
              <div class="row">
-               <div class="col-sm-8"><p>Posted by: <?php $username = $message->getUsername(); if($username===false){echo "Anonymous";}else{echo $username;} ?></p><p>Date: <?=$message->getDateSubmitted()?></p></div>
+               <div class="col-sm-8"><p>Posted by: <?php $username = $message->getUsername(); if($username===false){echo "Anonymous";}else{echo htmlentities($username);} ?></p><p>Date: <?=$message->getDateSubmitted()?></p></div>
                <?php if($userSession->loggedIn() && $userSession->getUserDetails("admin") == 1){ ?>
                  <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
                    <input type="hidden" value="<?= $message->getMessageId()?>" name="messageId">
