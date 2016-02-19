@@ -94,7 +94,7 @@ $messagesList = $messages->getAllMessages();
                <?php } ?>
              </div>
              <div class="row">
-               <div class="col-sm-12"><p><?php htmlentities($message->getMessage())?></p></div>
+               <div class="col-sm-12"><p><?php echo htmlentities($message->getMessage());?></p></div>
              </div>
            </div>
          <?php } ?>
