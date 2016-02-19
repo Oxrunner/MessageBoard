@@ -67,3 +67,29 @@ label{
 .errorMessage{
   color: red;
 }
+
+@media (max-width: 400px) {
+  h1{
+    font-size: 3.5em;
+  }
+
+  h2{
+    font-size: 1.5em;
+  }
+
+  .messages{
+    width: 100%;
+  }
+
+  .labelFloatRight{
+    float: left;
+  }
+
+  #message{
+    width: 100%;
+  }
+
+  #infoMessages, .errorMessage{
+    font-size: 1em;
+  }
+}

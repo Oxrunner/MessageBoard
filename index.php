@@ -5,7 +5,7 @@ include_once(__DIR__."/classes/UserSession.php");
 
 $userSession = new UserSession();
 
-$createMessageException = $infoMessage = $errorMessage = "";
+$infoMessage = $errorMessage = "";
 $messages = new Messages($userSession);
 if($_POST && isset($_POST["submit"])){
   try{
@@ -19,7 +19,7 @@ if($_POST && isset($_POST["submit"])){
       $userSession->logOutUser();
     }
   }catch(CreateMessageException $e){
-    $createMessageException = $e->getMessage();
+    $errorMessage = $e->getMessage();
   }catch(DeleteMessageException $e){
     $errorMessage = $e->getMessage();
   }catch(InvalidUsernameOrPasswordException $e){
@@ -48,8 +48,8 @@ $messagesList = $messages->getAllMessages();
            <?php if($userSession->loggedIn()){ ?>
             <p>Welcome <?=$userSession->getUserDetails("username")?></p><input type="submit" name="submit" value="Logout">
            <?php } else { ?>
-                <label for="username">Username:</label><input type="text" id="username" name="username">
-                <label for="password">Password:</label><input type="password" id="password" name="password">
+                <label for="username">Username:</label><input type="text" id="username" name="username"><br>
+                <label for="password">Password:</label><input type="password" id="password" name="password"><br>
                 <input type="submit" name="submit" value="Login">
                 <a href="Register.php">Register</a>
            <?php } ?>
@@ -67,6 +67,19 @@ $messagesList = $messages->getAllMessages();
        <div class="row">
          <div class="col-sm-12"><p class="errorMessage"><?=$errorMessage?></p></div>
        </div>
+
+       <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
+         <div class="row">
+           <div class="col-sm-4"><label for="message" class="labelFloatRight">Message:</label></div>
+           <div class="col-sm-8"><textarea rows="4" cols="50" name="message" id="message"></textarea></div>
+         </div>
+         <div class="row">
+           <div class="col-sm-4"></textarea></div>
+           <div class="col-sm-4"><input type="submit" value="Create Message" name="submit" id="createButton"></textarea></div>
+           <div class="col-sm-4"></textarea></div>
+         </div>
+       </form>
+
        <?php
        if(is_array($messagesList)){
          foreach($messagesList as $message){ ?>
@@ -90,21 +103,6 @@ $messagesList = $messages->getAllMessages();
            <div class="col-sm-12"><h2><?=$messagesList?></h2></div>
          </div>
        <?php } ?>
-
-       <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
-         <div class="row">
-           <div class="col-sm-12"><p class="errorMessage"><?=$createMessageException?></p></div>
-         </div>
-         <div class="row">
-           <div class="col-sm-4"><label for="message" class="labelFloatRight">Message:</label></div>
-           <div class="col-sm-8"><textarea rows="4" cols="50" name="message" id="message"></textarea></div>
-         </div>
-         <div class="row">
-           <div class="col-sm-4"></textarea></div>
-           <div class="col-sm-4"><input type="submit" value="Create Message" name="submit" id="createButton"></textarea></div>
-           <div class="col-sm-4"></textarea></div>
-         </div>
-       </form>
      </div>
 
    </body>
