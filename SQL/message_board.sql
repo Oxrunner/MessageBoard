@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`userId`, `username`, `password`, `salt1`, `salt2`, `admin`) VALUES
-(8, 'Admin', '2d6dd278e4349f834cabdf331826d53794893f90dc1ac8a8fd1ccff273aa19726ce5ee9e2e8cf4d984b9a44d1dbc455b', 'mjbs5Bety8sIwflhbMQLh5rf015k5Th5JAX9GqCB9fc0Qpbv0J', 'yEkALy1OMNQK4uZeBeaCS5CJOG3WU5G48UftXeWZkEuYJh6f8G', 0);
+(8, 'Admin', '2d6dd278e4349f834cabdf331826d53794893f90dc1ac8a8fd1ccff273aa19726ce5ee9e2e8cf4d984b9a44d1dbc455b', 'mjbs5Bety8sIwflhbMQLh5rf015k5Th5JAX9GqCB9fc0Qpbv0J', 'yEkALy1OMNQK4uZeBeaCS5CJOG3WU5G48UftXeWZkEuYJh6f8G', 1);
 
 --
 -- Constraints for dumped tables
