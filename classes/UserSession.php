@@ -22,6 +22,7 @@ class UserSession{
     if($this->getHashedPassword($password, $user) == $user->getPassword()){
         $_SESSION[$this->sessionKey]["username"] = $user->getUsername();
         $_SESSION[$this->sessionKey]["admin"] = $user->getAdmin();
+        $_SESSION[$this->sessionKey]["userId"] = $user->getUserId();
     } else {
       throw new InvalidUsernameOrPasswordException();
     }

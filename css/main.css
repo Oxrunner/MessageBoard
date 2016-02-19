@@ -46,6 +46,10 @@ label{
   color: white;
 }
 
+#messageBoardLink{
+  text-align: center;
+}
+
 .messages{
   width:50%;
   margin: 0 auto;

@@ -46,6 +46,9 @@ if($_POST && isset($_POST["submit"]) && $_POST["submit"] = "Register" && isset($
           <div class="row">
             <div class="col-sm-12"><input id="registerButton" type="submit" name="submit" value="Register"></div>
           </div>
+          <div class="row">
+            <div class="col-sm-12" id="messageBoardLink"><a href="index.php">Message Board</a></div>
+          </div>
         </form>
 
       </div>

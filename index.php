@@ -51,6 +51,7 @@ $messagesList = $messages->getAllMessages();
                 <label for="username">Username:</label><input type="text" id="username" name="username">
                 <label for="password">Password:</label><input type="password" id="password" name="password">
                 <input type="submit" name="submit" value="Login">
+                <a href="Register.php">Register</a>
            <?php } ?>
            </form>
 
@@ -71,11 +72,11 @@ $messagesList = $messages->getAllMessages();
          foreach($messagesList as $message){ ?>
            <div class="messages">
              <div class="row">
-               <div class="col-sm-6"><p>Date Submitted: <?=$message->getDateSubmitted()?></p></div>
+               <div class="col-sm-8"><p>Posted by: <?php $username = $message->getUsername(); if($username===false){echo "Anonymous";}else{echo $username;} ?></p><p>Date: <?=$message->getDateSubmitted()?></p></div>
                <?php if($userSession->loggedIn() && $userSession->getUserDetails("admin") == 1){ ?>
                  <form action="<?= $_SERVER['PHP_SELF']?>" method="POST">
                    <input type="hidden" value="<?= $message->getMessageId()?>" name="messageId">
-                   <div class="col-sm-6"><input name="submit" value="Delete" type="submit" class="deleteButton"></div>
+                   <div class="col-sm-4"><input name="submit" value="Delete" type="submit" class="deleteButton"></div>
                  </form>
                <?php } ?>
              </div>

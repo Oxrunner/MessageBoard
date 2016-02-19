@@ -14,7 +14,11 @@ class Messages{
     if($message == null || empty($message) || $message == ""){
         throw new CreateMessageException("Please make sure you have entered a message.");
     }
-    $newMessage = new Message(null, $message, null);
+    $userId = null;
+    if($this->userSession->loggedIn()){
+      $userId = $this->userSession->getUserDetails("userId");
+    }
+    $newMessage = new Message(null, $message, null, $userId);
     $newMessage->save();
     return "New Message Successfully Submitted.";
   }
@@ -28,7 +32,7 @@ class Messages{
   }
 
   public function deleteMessage($id){
-    if($userSession->loggedIn() && $userSession->getUserDetails("admin") == 1){
+    if($this->userSession->loggedIn() && $this->userSession->getUserDetails("admin") == 1){
       $message = Message::getById($id);
       if(sizeof($message) != 1){
         throw new DeleteMessageException("Unable to delete message.");
